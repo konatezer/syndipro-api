@@ -10,6 +10,7 @@ load_dotenv()
 
 from sqlmodel import SQLModel  # noqa: E402
 
+from app.models.membre import MembreSyndicat  # noqa: E402, F401
 from app.models.syndicat import Syndicat  # noqa: E402, F401
 from app.models.unite import Unite  # noqa: E402, F401
 from app.models.user import User  # noqa: E402, F401
