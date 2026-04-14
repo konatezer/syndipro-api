@@ -4,7 +4,15 @@ from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
 from app.core.database import get_session
-from app.models import MembreSyndicat, Syndicat, Unite, User  # noqa: F401
+from app.models import (  # noqa: F401
+    Cotisation,
+    Depense,
+    FondsPrevoyance,
+    MembreSyndicat,
+    Syndicat,
+    Unite,
+    User,
+)
 from main import app
 
 
