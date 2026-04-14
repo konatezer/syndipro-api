@@ -1,7 +1,8 @@
 # app/models/user.py
+import uuid as uuid_pkg
 from sqlmodel import SQLModel, Field
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 
@@ -15,11 +16,11 @@ class User(SQLModel, table=True):
     """Table des utilisateurs de SyndiPro"""
     __tablename__ = "users"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: uuid_pkg.UUID = Field(default_factory=uuid_pkg.uuid4, primary_key=True)
     email: str = Field(unique=True, index=True)
     nom: str = Field(min_length=2, max_length=100)
     prenom: str = Field(min_length=2, max_length=100)
     hashed_password: str
     role: RoleEnum = Field(default=RoleEnum.coproprietaire)
     is_active: bool = Field(default=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
