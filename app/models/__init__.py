@@ -1,3 +1,11 @@
+from app.models.assemblee import (
+    Assemblee,
+    Resolution,
+    StatutAssemblee,
+    TypeAssemblee,
+    TypeVote,
+    Vote,
+)
 from app.models.finance import (
     CategorieDepense,
     Cotisation,
@@ -22,4 +30,10 @@ __all__ = [
     "FondsPrevoyance",
     "CategorieDepense",
     "StatutCotisation",
+    "Assemblee",
+    "Resolution",
+    "Vote",
+    "StatutAssemblee",
+    "TypeAssemblee",
+    "TypeVote",
 ]
