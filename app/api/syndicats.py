@@ -24,8 +24,8 @@ def create(
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    """Créer un nouveau syndicat de copropriété"""
-    return create_syndicat(data, session)
+    """Créer un nouveau syndicat — le créateur devient président automatiquement"""
+    return create_syndicat(data, session, creator=current_user)
 
 
 @router.get("/", response_model=list[SyndicatResponse])

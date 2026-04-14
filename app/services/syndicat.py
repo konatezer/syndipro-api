@@ -4,12 +4,16 @@ from datetime import datetime, timezone
 from fastapi import HTTPException, status
 from sqlmodel import Session, select
 
+from app.models.membre import MembreSyndicat, RoleSyndicat
 from app.models.syndicat import Syndicat
+from app.models.user import User
 from app.schemas.syndicat import SyndicatCreate, SyndicatUpdate
 
 
-def create_syndicat(data: SyndicatCreate, session: Session) -> Syndicat:
-    """Crée un nouveau syndicat de copropriété"""
+def create_syndicat(
+    data: SyndicatCreate, session: Session, creator: User | None = None
+) -> Syndicat:
+    """Crée un nouveau syndicat et ajoute le créateur comme président"""
     if data.numero_syndicat:
         existing = session.exec(
             select(Syndicat).where(Syndicat.numero_syndicat == data.numero_syndicat)
@@ -22,6 +26,16 @@ def create_syndicat(data: SyndicatCreate, session: Session) -> Syndicat:
 
     syndicat = Syndicat(**data.model_dump())
     session.add(syndicat)
+    session.flush()
+
+    if creator:
+        membre = MembreSyndicat(
+            user_id=creator.id,
+            syndicat_id=syndicat.id,
+            role_syndicat=RoleSyndicat.president,
+        )
+        session.add(membre)
+
     session.commit()
     session.refresh(syndicat)
     return syndicat
