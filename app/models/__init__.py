@@ -14,6 +14,13 @@ from app.models.finance import (
     FondsPrevoyance,
     StatutCotisation,
 )
+from app.models.loi16 import (
+    CategorieComposante,
+    ComposanteImmeuble,
+    EntreeCarnet,
+    EtatComposante,
+    ScoreConformite,
+)
 from app.models.maintenance import (
     DemandeMaintenance,
     Document,
@@ -48,4 +55,9 @@ __all__ = [
     "UrgenceMaintenance",
     "StatutMaintenance",
     "Annonce",
+    "ComposanteImmeuble",
+    "EntreeCarnet",
+    "ScoreConformite",
+    "CategorieComposante",
+    "EtatComposante",
 ]
