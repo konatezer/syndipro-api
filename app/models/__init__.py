@@ -1,3 +1,10 @@
+from app.models.finance import (
+    CategorieDepense,
+    Cotisation,
+    Depense,
+    FondsPrevoyance,
+    StatutCotisation,
+)
 from app.models.membre import MembreSyndicat, RoleSyndicat
 from app.models.syndicat import Syndicat
 from app.models.unite import Unite
@@ -10,4 +17,9 @@ __all__ = [
     "Unite",
     "MembreSyndicat",
     "RoleSyndicat",
+    "Cotisation",
+    "Depense",
+    "FondsPrevoyance",
+    "CategorieDepense",
+    "StatutCotisation",
 ]
