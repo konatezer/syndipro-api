@@ -1,7 +1,6 @@
 # main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.database import create_db_and_tables
 from app.api.auth import router as auth_router
 
 # Crée l'application FastAPI
@@ -22,12 +21,6 @@ app.add_middleware(
 
 # Enregistre les routes
 app.include_router(auth_router)
-
-
-@app.on_event("startup")
-def on_startup():
-    """Crée les tables au démarrage de l'application"""
-    create_db_and_tables()
 
 
 @app.get("/")
