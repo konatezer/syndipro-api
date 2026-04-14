@@ -4,7 +4,7 @@ from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
 from app.core.database import get_session
-from app.models import Syndicat, Unite, User  # noqa: F401 — register models
+from app.models import MembreSyndicat, Syndicat, Unite, User  # noqa: F401
 from main import app
 
 
