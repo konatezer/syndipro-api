@@ -6,12 +6,19 @@ from app.models.assemblee import (
     TypeVote,
     Vote,
 )
+from app.models.communication import Annonce
 from app.models.finance import (
     CategorieDepense,
     Cotisation,
     Depense,
     FondsPrevoyance,
     StatutCotisation,
+)
+from app.models.maintenance import (
+    DemandeMaintenance,
+    Document,
+    StatutMaintenance,
+    UrgenceMaintenance,
 )
 from app.models.membre import MembreSyndicat, RoleSyndicat
 from app.models.syndicat import Syndicat
@@ -36,4 +43,9 @@ __all__ = [
     "StatutAssemblee",
     "TypeAssemblee",
     "TypeVote",
+    "DemandeMaintenance",
+    "Document",
+    "UrgenceMaintenance",
+    "StatutMaintenance",
+    "Annonce",
 ]
