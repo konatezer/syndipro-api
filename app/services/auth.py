@@ -1,4 +1,5 @@
 # app/services/auth.py
+import uuid
 from sqlmodel import Session, select
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -84,7 +85,7 @@ def get_current_user(
         )
 
     # 3. Cherche l'utilisateur dans la BDD
-    user = session.get(User, int(user_id))
+    user = session.get(User, uuid.UUID(user_id))
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
