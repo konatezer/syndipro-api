@@ -1,11 +1,17 @@
 # app/services/auth.py
 import uuid
-from sqlmodel import Session, select
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from app.models.user import User
-from app.core.security import hash_password, verify_password, create_access_token, decode_access_token
+from sqlmodel import Session, select
+
 from app.core.database import get_session
+from app.core.security import (
+    decode_access_token,
+    hash_password,
+    verify_password,
+)
+from app.models.user import User
 from app.schemas.auth import UserRegister
 
 # Dit à FastAPI où trouver le token dans les requêtes
@@ -16,14 +22,11 @@ def register_user(data: UserRegister, session: Session) -> User:
     """Crée un nouveau compte utilisateur"""
 
     # 1. Vérifie si l'email existe déjà
-    existing = session.exec(
-        select(User).where(User.email == data.email)
-    ).first()
+    existing = session.exec(select(User).where(User.email == data.email)).first()
 
     if existing:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Un compte avec cet email existe déjà"
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Un compte avec cet email existe déjà"
         )
 
     # 2. Crée l'utilisateur avec le mot de passe haché
@@ -31,7 +34,7 @@ def register_user(data: UserRegister, session: Session) -> User:
         email=data.email,
         nom=data.nom,
         prenom=data.prenom,
-        hashed_password=hash_password(data.password)
+        hashed_password=hash_password(data.password),
     )
 
     # 3. Sauvegarde dans la BDD
@@ -46,9 +49,7 @@ def authenticate_user(email: str, password: str, session: Session) -> User:
     """Vérifie les identifiants et retourne l'utilisateur"""
 
     # 1. Cherche l'utilisateur par email
-    user = session.exec(
-        select(User).where(User.email == email)
-    ).first()
+    user = session.exec(select(User).where(User.email == email)).first()
 
     # 2. Vérifie que l'utilisateur existe ET que le mot de passe est bon
     if not user or not verify_password(password, user.hashed_password):
@@ -62,8 +63,7 @@ def authenticate_user(email: str, password: str, session: Session) -> User:
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    session: Session = Depends(get_session)
+    token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)
 ) -> User:
     """Extrait l'utilisateur du token JWT — utilisé comme dépendance"""
 
@@ -79,17 +79,11 @@ def get_current_user(
     # 2. Récupère l'ID utilisateur du token
     user_id = payload.get("sub")
     if user_id is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token invalide"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalide")
 
     # 3. Cherche l'utilisateur dans la BDD
     user = session.get(User, uuid.UUID(user_id))
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Utilisateur non trouvé"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Utilisateur non trouvé")
 
     return user

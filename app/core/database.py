@@ -1,5 +1,6 @@
 # app/core/database.py
-from sqlmodel import SQLModel, Session, create_engine
+from sqlmodel import Session, SQLModel, create_engine
+
 from app.core.config import DATABASE_URL
 
 # Crée le moteur de connexion à la BDD

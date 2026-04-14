@@ -1,18 +1,18 @@
+import os
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-# Charge les variables d'environnement depuis .env
-from dotenv import load_dotenv
-import os
 load_dotenv()
 
-# Importe les modèles SQLModel pour l'autogenerate
-from sqlmodel import SQLModel
-from app.models.user import User  # noqa: F401 — nécessaire pour que le metadata connaisse la table
+from sqlmodel import SQLModel  # noqa: E402
+
+from app.models.syndicat import Syndicat  # noqa: E402, F401
+from app.models.unite import Unite  # noqa: E402, F401
+from app.models.user import User  # noqa: E402, F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -53,9 +53,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

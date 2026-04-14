@@ -2,14 +2,12 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
+
 from app.core.database import get_session
 from app.core.security import create_access_token
-from app.schemas.auth import (
-    UserRegister, UserLogin, UserResponse,
-    TokenResponse, MessageResponse
-)
-from app.services.auth import register_user, authenticate_user, get_current_user
 from app.models.user import User
+from app.schemas.auth import TokenResponse, UserRegister, UserResponse
+from app.services.auth import authenticate_user, get_current_user, register_user
 
 # Crée un "routeur" — un groupe de routes liées à l'auth
 router = APIRouter(prefix="/auth", tags=["Authentification"])
@@ -29,7 +27,10 @@ def register(data: UserRegister, session: Session = Depends(get_session)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    session: Session = Depends(get_session),
+):
     """
     Se connecter et obtenir un token JWT.
 
