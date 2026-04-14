@@ -1,4 +1,5 @@
 # app/schemas/auth.py
+import uuid
 from pydantic import BaseModel, ConfigDict, EmailStr
 from app.models.user import RoleEnum
 
@@ -24,7 +25,7 @@ class UserResponse(BaseModel):
     """Données retournées (JAMAIS le mot de passe!)"""
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: uuid.UUID
     email: str
     nom: str
     prenom: str
