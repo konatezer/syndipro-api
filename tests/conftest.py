@@ -5,13 +5,16 @@ from sqlmodel.pool import StaticPool
 
 from app.core.database import get_session
 from app.models import (  # noqa: F401
+    Assemblee,
     Cotisation,
     Depense,
     FondsPrevoyance,
     MembreSyndicat,
+    Resolution,
     Syndicat,
     Unite,
     User,
+    Vote,
 )
 from main import app
 
