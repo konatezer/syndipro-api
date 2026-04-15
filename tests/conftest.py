@@ -15,6 +15,7 @@ from app.models import (  # noqa: F401
     EntreeCarnet,
     FondsPrevoyance,
     MembreSyndicat,
+    RefreshToken,
     Resolution,
     ScoreConformite,
     Syndicat,
