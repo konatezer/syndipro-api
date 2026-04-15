@@ -28,6 +28,7 @@ from app.models.maintenance import (
     UrgenceMaintenance,
 )
 from app.models.membre import MembreSyndicat, RoleSyndicat
+from app.models.refresh_token import RefreshToken
 from app.models.syndicat import Syndicat
 from app.models.unite import Unite
 from app.models.user import RoleEnum, User
@@ -39,6 +40,7 @@ __all__ = [
     "Unite",
     "MembreSyndicat",
     "RoleSyndicat",
+    "RefreshToken",
     "Cotisation",
     "Depense",
     "FondsPrevoyance",

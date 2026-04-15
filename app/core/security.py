@@ -1,4 +1,6 @@
 # app/core/security.py
+import hashlib
+import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
@@ -35,3 +37,16 @@ def decode_access_token(token: str) -> Optional[dict]:
         return payload
     except JWTError:
         return None
+
+
+def generate_refresh_token() -> str:
+    """Génère un refresh token opaque (64 octets = 512 bits d'entropie).
+
+    Le token brut n'est jamais stocké en BDD — seul son hash SHA-256 l'est.
+    """
+    return secrets.token_urlsafe(64)
+
+
+def hash_refresh_token(raw_token: str) -> str:
+    """Hash SHA-256 d'un refresh token pour stockage sécurisé en BDD."""
+    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()

@@ -16,6 +16,7 @@ from app.models.finance import Cotisation, Depense, FondsPrevoyance  # noqa: E40
 from app.models.loi16 import ComposanteImmeuble, EntreeCarnet, ScoreConformite  # noqa: E402, F401
 from app.models.maintenance import DemandeMaintenance, Document  # noqa: E402, F401
 from app.models.membre import MembreSyndicat  # noqa: E402, F401
+from app.models.refresh_token import RefreshToken  # noqa: E402, F401
 from app.models.syndicat import Syndicat  # noqa: E402, F401
 from app.models.unite import Unite  # noqa: E402, F401
 from app.models.user import User  # noqa: E402, F401
