@@ -41,10 +41,26 @@ class UserResponse(BaseModel):
 
 
 class TokenResponse(BaseModel):
-    """Token retourné après connexion"""
+    """Token retourné après connexion ou refresh.
+
+    Contient l'access_token (JWT 15 min) et le refresh_token (opaque 7 jours).
+    """
 
     access_token: str
+    refresh_token: str
     token_type: str = "bearer"
+
+
+class RefreshRequest(BaseModel):
+    """Payload pour POST /auth/refresh"""
+
+    refresh_token: str
+
+
+class LogoutRequest(BaseModel):
+    """Payload pour POST /auth/logout — révoque le refresh token"""
+
+    refresh_token: str
 
 
 class MessageResponse(BaseModel):
