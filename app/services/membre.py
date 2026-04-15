@@ -6,7 +6,12 @@ from sqlmodel import Session, select
 from app.models.membre import MembreSyndicat
 from app.models.syndicat import Syndicat
 from app.models.user import User
-from app.schemas.membre import MembreCreate, MembreDetailResponse, MembreUpdate
+from app.schemas.membre import (
+    MembreCreate,
+    MembreCreateByEmail,
+    MembreDetailResponse,
+    MembreUpdate,
+)
 
 
 def add_membre(syndicat_id: uuid.UUID, data: MembreCreate, session: Session) -> MembreSyndicat:
@@ -47,6 +52,23 @@ def add_membre(syndicat_id: uuid.UUID, data: MembreCreate, session: Session) -> 
     session.commit()
     session.refresh(membre)
     return membre
+
+
+def add_membre_by_email(
+    syndicat_id: uuid.UUID, data: MembreCreateByEmail, session: Session
+) -> MembreSyndicat:
+    """Ajoute un membre à un syndicat en cherchant l'utilisateur par email."""
+    user = session.exec(select(User).where(User.email == data.user_email)).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Aucun utilisateur trouvé avec l'email {data.user_email}",
+        )
+    return add_membre(
+        syndicat_id,
+        MembreCreate(user_id=user.id, role_syndicat=data.role_syndicat),
+        session,
+    )
 
 
 def get_membres_syndicat(syndicat_id: uuid.UUID, session: Session) -> list[MembreDetailResponse]:

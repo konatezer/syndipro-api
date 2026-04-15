@@ -8,9 +8,16 @@ from app.models.membre import RoleSyndicat
 
 
 class MembreCreate(BaseModel):
-    """Ajouter un utilisateur à un syndicat"""
+    """Ajouter un utilisateur à un syndicat (par ID)"""
 
     user_id: uuid.UUID
+    role_syndicat: RoleSyndicat = RoleSyndicat.coproprietaire
+
+
+class MembreCreateByEmail(BaseModel):
+    """Ajouter un utilisateur à un syndicat par email (UX admin-friendly)"""
+
+    user_email: str
     role_syndicat: RoleSyndicat = RoleSyndicat.coproprietaire
 
 

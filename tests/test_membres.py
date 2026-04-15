@@ -50,6 +50,33 @@ def test_add_membre(client: TestClient, auth_headers: dict):
     assert add_resp.json()["role_syndicat"] == "coproprietaire"
 
 
+def test_add_membre_by_email(client: TestClient, auth_headers: dict):
+    resp = client.post("/syndicats/", json=SYNDICAT_DATA, headers=auth_headers)
+    syndicat_id = resp.json()["id"]
+    _create_second_user(client)
+
+    add_resp = client.post(
+        f"/syndicats/{syndicat_id}/membres/by-email",
+        json={"user_email": "second@syndipro.qc", "role_syndicat": "tresorier"},
+        headers=auth_headers,
+    )
+    assert add_resp.status_code == 201
+    assert add_resp.json()["role_syndicat"] == "tresorier"
+
+
+def test_add_membre_by_unknown_email(client: TestClient, auth_headers: dict):
+    resp = client.post("/syndicats/", json=SYNDICAT_DATA, headers=auth_headers)
+    syndicat_id = resp.json()["id"]
+
+    resp = client.post(
+        f"/syndicats/{syndicat_id}/membres/by-email",
+        json={"user_email": "noexist@syndipro.qc"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 404
+    assert "Aucun utilisateur" in resp.json()["detail"]
+
+
 def test_add_duplicate_membre(client: TestClient, auth_headers: dict):
     resp = client.post("/syndicats/", json=SYNDICAT_DATA, headers=auth_headers)
     syndicat_id = resp.json()["id"]
