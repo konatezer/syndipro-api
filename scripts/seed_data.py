@@ -9,17 +9,16 @@ Usage:
 """
 
 import random
-import uuid
 from datetime import date, datetime, timedelta, timezone
 
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from app.core.config import DATABASE_URL
 from app.core.security import hash_password
-from app.models.assemblee import Assemblee, Resolution, Vote
+from app.models.assemblee import Assemblee, Resolution
 from app.models.communication import Annonce
 from app.models.finance import Cotisation, Depense, FondsPrevoyance
-from app.models.loi16 import ComposanteImmeuble, EntreeCarnet, ScoreConformite
+from app.models.loi16 import ComposanteImmeuble, EntreeCarnet
 from app.models.maintenance import DemandeMaintenance, Document
 from app.models.membre import MembreSyndicat, RoleSyndicat
 from app.models.syndicat import Syndicat
@@ -221,14 +220,16 @@ def seed_database():
     SQLModel.metadata.create_all(engine)
 
     with Session(engine) as session:
-        # Check if data already exists
-        existing = session.exec(select(User)).first()
-        if existing:
-            print("La base de données contient déjà des données. Seed annulé.")
-            print("Pour re-seed, videz les tables d'abord.")
+        # Vérifier si le seed a déjà été appliqué (via admin@syndipro.qc)
+        admin_exists = session.exec(
+            select(User).where(User.email == "admin@syndipro.qc")
+        ).first()
+        if admin_exists:
+            print("Le compte admin@syndipro.qc existe déjà. Seed déjà appliqué.")
+            print("Les comptes de test sont disponibles — voir la liste ci-dessous.")
             return
 
-        print("Création des données de test...")
+        print("Création des données de test (préservation des utilisateurs existants)...")
 
         # ── 1. Utilisateurs ──
         users = []
